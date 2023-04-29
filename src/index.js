@@ -1,5 +1,6 @@
 import './css/styles.css';
 import fetchCountries from './fetchCountries';
+import { Notify } from 'notiflix';
 
 var debounce = require('lodash.debounce');
 
@@ -42,17 +43,28 @@ const onInput = async (e) => {
         return;
     }
     
-    let items = await fetchCountries(name);
+    let response = await fetchCountries(name);
     
+    if (response.status === 404) {
+        Notify.failure('Oops, there is no country with that name');
+        return;
+    }
 
-    if (items.length === 1) {
-        renderCountry(items[0]);
+    const items = await response.json();
+    
+    if (items.length > 10) {
+        Notify.info('Too many matches found. Please enter a more specific name.');
         return;
     }
 
     if (items.length > 1) {
          renderCountryList(items);
          return;
+    }
+
+    if (items.length === 1) {
+        renderCountry(items[0]);
+        return;
     }
 };
 
