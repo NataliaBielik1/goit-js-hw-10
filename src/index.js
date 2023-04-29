@@ -34,11 +34,16 @@ function renderCountryList(items) {
 
 const onInput = async (e) => {
     let name = e.target.value.trim();
+
+    countryInfo.innerHTML = '';
+    countryList.innerHTML = '';
+
+    if (name === '') {
+        return;
+    }
     
     let items = await fetchCountries(name);
     
-    countryInfo.innerHTML = '';
-    countryList.innerHTML = '';
 
     if (items.length === 1) {
         renderCountry(items[0]);
