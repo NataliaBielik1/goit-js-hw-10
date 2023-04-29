@@ -1,6 +1,8 @@
 import './css/styles.css';
 import fetchCountries from './fetchCountries';
 
+var debounce = require('lodash.debounce');
+
 const DEBOUNCE_DELAY = 300;
 
 const input = document.querySelector('input');
@@ -35,6 +37,9 @@ const onInput = async (e) => {
     
     let items = await fetchCountries(name);
     
+    countryInfo.innerHTML = '';
+    countryList.innerHTML = '';
+
     if (items.length === 1) {
         renderCountry(items[0]);
         return;
@@ -46,4 +51,4 @@ const onInput = async (e) => {
     }
 };
 
-input.oninput = onInput;
+input.oninput = debounce(onInput, DEBOUNCE_DELAY);
