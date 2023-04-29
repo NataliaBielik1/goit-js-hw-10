@@ -1,15 +1,11 @@
 import './css/styles.css';
+import fetchCountries from './fetchCountries';
 
 const DEBOUNCE_DELAY = 300;
 
 const input = document.querySelector('input');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
-
-async function fetchCOuntriesByName(name) {
-    const response = await fetch('https://restcountries.com/v3.1/name/' + name);
-    return response.json();
-}
 
 function renderCountry(c) {
     let languages = [];
@@ -37,7 +33,7 @@ function renderCountryList(items) {
 const onInput = async (e) => {
     let name = e.target.value.trim();
     
-    let items = await fetchCOuntriesByName(name);
+    let items = await fetchCountries(name);
     
     if (items.length === 1) {
         renderCountry(items[0]);
