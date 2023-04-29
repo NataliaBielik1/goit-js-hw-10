@@ -21,7 +21,7 @@ function renderCountry(c) {
 
     countryInfo.innerHTML = `
         <h2>
-            <img src="${c.flags.svg}" alt="${c.flags.alt}"/> 
+            <img src="${c.flags.svg}" class="flag" alt="${c.flags.alt}" /> 
             <span>${c.name.common}</span>
         </h2>
         <p>Capital: ${c.capital[0]}</p>
@@ -30,19 +30,24 @@ function renderCountry(c) {
     `;
 }
 
+function renderCountryList(items) {
+    countryList.innerHTML = items.map(c => `<li><img src="${c.flags.svg}" alt="${c.flags.alt}" class="flag" /> <span>${c.name.common}</span></li>`).join('');
+}
+
 const onInput = async (e) => {
-    let items = await fetchCOuntriesByName(e.target.value.trim());
+    let name = e.target.value.trim();
     
-    console.log(items);
+    let items = await fetchCOuntriesByName(name);
+    
     if (items.length === 1) {
         renderCountry(items[0]);
         return;
     }
 
-    // if (items.length > 1) {
-    //     //renderCountry(items[0]);
-    //     return;
-    // }
+    if (items.length > 1) {
+         renderCountryList(items);
+         return;
+    }
 };
 
 input.oninput = onInput;
